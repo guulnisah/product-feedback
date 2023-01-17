@@ -26,7 +26,7 @@ export default function NewFeedback() {
             description: e.target.querySelector('#detail').value,
             comments: 0
         })
-        navigate('/')
+        navigate('/product-feedback')
     }
 
     function invalidForm(e) {
@@ -37,7 +37,7 @@ export default function NewFeedback() {
 
     return (
         <UpdateContainer>
-            <StyledLink to="/" color="#647196">
+            <StyledLink onClick={() => navigate(-1)} color="#647196">
                 <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L2 5l4-4" stroke="#4661E6" stroke-width="2" fill="none" fill-rule="evenodd" /></svg>
                 Go Back
             </StyledLink>

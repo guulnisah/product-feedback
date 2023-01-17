@@ -7,13 +7,13 @@ export default function displayFeatures(arr) {
             <Feature key={elem.id} status={elem.status}>
                 <Status status={elem.status}>{elem.status}</Status>
                 <div>
-                    <h3><Link to={`/feedback/${elem.id}`}>{elem.title}</Link></h3>
+                    <h3><Link to={`/product-feedback/feedback/${elem.id}`}>{elem.title}</Link></h3>
                     <p>{elem.description}</p>
                 </div>
-                <PillButton>{elem.category}</PillButton>
+                <PillButton as={'span'}>{elem.category}</PillButton>
                 <div className="lastRow">
                     <UpvoteButton column={false}>
-                        <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#4661E6" stroke-width="2" fill="none" fill-rule="evenodd" /></svg>
+                        <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
                         {elem.upvotes}
                     </UpvoteButton>
                     <span>

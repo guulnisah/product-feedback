@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { PillButton } from './Styles'
+import { useState, useEffect } from 'react'
+import { Header_Labels, PillButton } from './Styles'
 import { nanoid } from 'nanoid'
+import useWindowSize from '../hooks/useWindowSize'
 
 const labelTags = [
     { label: "All", key: "all" },
@@ -13,11 +14,19 @@ const labelTags = [
 
 export default function ProjectFilter({ changeFilter }) {
     const [currentFilter, setCurrentFilter] = useState({ label: "All", key: "all" })
+    const windowSize = useWindowSize();
 
     const handleClick = (newFilter) => {
         setCurrentFilter(newFilter)
         changeFilter(newFilter)
     }
+
+    useEffect(() => {
+        if (windowSize.width < 768) {
+            setCurrentFilter({ label: "All", key: "all" })
+            changeFilter({ label: "All", key: "all" })
+        }
+    }, [windowSize])
 
     const labels = labelTags.map(elem => {
         return (
@@ -30,8 +39,8 @@ export default function ProjectFilter({ changeFilter }) {
     })
 
     return (
-        <div className="labels">
+        <Header_Labels>
             {labels}
-        </div>
+        </Header_Labels>
     )
 }

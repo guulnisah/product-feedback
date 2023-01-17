@@ -5,10 +5,12 @@ import { nanoid } from 'nanoid';
 const DropDownContainer = styled.div`
     position: ${({ styles }) => styles.position};
     cursor: pointer;
-    left: ${({ styles }) => styles.position === 'absolute' ? '160px' : '0'};
+    left: ${({ styles, mobile }) => mobile ? '0' : styles.position === 'absolute' ? '160px' : '0'};
     width: ${({ styles }) => styles.width};
     height: ${({ styles }) => styles.padding};
     div {
+    display: flex;
+    align-items: center;
     background-color: ${({ styles }) => styles.backgroundColor};
     color: ${({ styles }) => styles.color};
     border-radius: 5px;
@@ -16,10 +18,16 @@ const DropDownContainer = styled.div`
     line-height: 1.43;
     height: 100%;
     padding: ${({ styles }) => styles.padding};
+    
+    svg {
+        margin-left: 10px;
+    }
     }
     
+    @media screen and (max-width: 576px) {
     div svg {
-        margin-left: auto;
+        margin-left: 5px;
+    }
     }
 `;
 
@@ -51,7 +59,7 @@ const DropDownList = styled.ul`
 
 const iconCheck = <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1" /></svg>
 
-export default function Dropdown({ items, state, onChange, text, styles }) {
+export default function Dropdown({ items, state, onChange, text, styles, mobile }) {
     const [isOpen, setIsOpen] = useState(false);
 
     function toggle() {
@@ -73,16 +81,15 @@ export default function Dropdown({ items, state, onChange, text, styles }) {
     });
 
     return (
-        <DropDownContainer styles={styles} onClick={toggle}>
+        <DropDownContainer mobile={mobile} styles={styles} onClick={toggle} role="button" tabIndex='0' >
             <div>
-                <span>{text ? text + state?.label : state?.label}
-                    {
-                        isOpen ?
-                            <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#fff" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
-                            :
-                            <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="#fff" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
-                    }
-                </span>
+                <span>{text ? text + state?.label : state?.label}</span>
+                {
+                    isOpen ?
+                        <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#fff" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
+                        :
+                        <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="#fff" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
+                }
             </div>
             {isOpen && (
                 <DropDownList styles={styles}>

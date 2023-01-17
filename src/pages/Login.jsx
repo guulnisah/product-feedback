@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import useLogin from '../hooks/useLogin'
 import { Link } from 'react-router-dom'
-import { Button, RegistrationContainer, StyledInput, StyledLabel } from '../components/Styles'
+import { RegistrationForm, Button, RegistrationContainer, StyledInput, StyledLabel } from '../components/Styles'
 
 export default function Login() {
     const [email, setEmail] = useState('')
@@ -15,33 +15,34 @@ export default function Login() {
 
     return (
         <RegistrationContainer>
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <StyledLabel htmlFor="email">Email</StyledLabel>
-                    <StyledInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <StyledLabel htmlFor="password">Password</StyledLabel>
-                    <StyledInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <Button hover="#C75AF6" color="#AD1FEA">Login</Button>
-                <span>Don't have an accout? <Link to="/signup">Signup</Link></span>
-
-            </form>
-            {error && error}
+            <RegistrationForm>
+                <h2>Login</h2>
+                <form onSubmit={handleLogin}>
+                    <div>
+                        <StyledLabel htmlFor="email">Email</StyledLabel>
+                        <StyledInput
+                            id="email"
+                            type="email"
+                            name="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <StyledLabel htmlFor="password">Password</StyledLabel>
+                        <StyledInput
+                            id="password"
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    <Button width="144px" hover="#C75AF6" color="#AD1FEA">Log In</Button>
+                    <span>Don't have an account? <Link to="/product-feedback/signup">Signup</Link></span>
+                </form>
+                {error && error}
+            </RegistrationForm>
         </RegistrationContainer>
     )
 

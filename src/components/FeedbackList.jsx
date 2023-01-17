@@ -13,7 +13,7 @@ export default function FeedbackList({ feedback }) {
                 <h3>There is no feedback yet.</h3>
                 <p>Got a suggestion? Found a bug that needs to be squashed? We love hearing about new ideas to improve our app.</p>
                 <Button hover="#C75AF6" width="10rem" color="#AD1FEA">
-                    <Link to="/feedback/new" > + Add Feedback </Link>
+                    <Link to="/product-feedback/feedback/new" > + Add Feedback </Link>
                 </Button>
             </NoSuggestions>
     )

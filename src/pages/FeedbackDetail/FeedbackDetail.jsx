@@ -1,4 +1,4 @@
-import { Details, ReplyForm, StyledLink, Avatar, DetailsContainer, Comments, AddComment, Comment, Replies, Button, UpvoteButton, PillButton, Suggestion, Nav } from '../../components/Styles'
+import { Details, ReplyForm, StyledLink, Avatar, DetailsContainer, Comments, AddComment, Comment, Replies, Button, UpvoteButton, PillButton, Suggestion, PurpleHeader } from '../../components/Styles'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState, useCallback } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
@@ -8,6 +8,7 @@ import { db } from '../../firebase/config'
 import displayFeedback from '../../utils/displayFeedback'
 import { Link } from 'react-router-dom'
 import { nanoid } from 'nanoid'
+import { useNavigate } from 'react-router-dom'
 
 export default function FeedbackDetail() {
     const { id } = useParams()
@@ -16,10 +17,12 @@ export default function FeedbackDetail() {
     const { user } = useAuthContext()
     const [comments, setComments] = useState()
     const [charLeft, setCharLeft] = useState(250)
+    const navigate = useNavigate()
 
     async function submitComment(e) {
         e.preventDefault()
         const commentText = e.target.querySelector('#comment').value
+        if (!commentText) { return; }
         const collectionRef = collection(db, 'feedback', id, 'comments')
         const documentRef = doc(db, 'feedback', id)
         await addDoc(collectionRef, {
@@ -53,57 +56,62 @@ export default function FeedbackDetail() {
     }
 
     function openReply(e) {
-        const form = e.target.parentElement.parentElement.querySelector("#hiddenCommentReply")
+        const form = e.target.parentElement.parentElement.parentElement.parentElement.querySelector("#hiddenCommentReply")
         form.style.display === "none" ? form.style.display = "flex" : form.style.display = "none"
     }
 
     function displayComments(arr) {
         const result = arr.map(elem => {
             return (
-                <div key={elem.key}>
-                    <Comment>
-                        <Avatar width="40px" src={elem.user.image} />
-                        <div className="rightSide">
-                            <div className="userInfo">
-                                <div>
-                                    <p>{elem.user.name}</p>
-                                    <span>@{elem.user.username.substring(0, elem.user.username.indexOf("@"))}</span>
+                <>
+                    <div key={elem.key}>
+                        <Comment>
+                            <Avatar width="40px" src={elem.user.image} />
+                            <div className="rightSide">
+                                <div className="userInfo">
+                                    <div>
+                                        <p>{elem.user.name}</p>
+                                        <span>@{elem.user.username.substring(0, elem.user.username.indexOf("@"))}</span>
+                                    </div>
+                                    <button onClick={openReply}>Reply</button>
                                 </div>
-                                <button onClick={openReply}>Reply</button>
+                                <p className="comment">{elem.content}</p>
                             </div>
-                            <p className="comment">{elem.content}</p>
-                            <ReplyForm style={{ display: "none" }} onSubmit={(e) => handleReply(e, elem.key)} id="hiddenCommentReply" data-user={elem.user.username}>
-                                <textarea id="reply"></textarea>
-                                <Button width="117px" color="#AD1FEA">Post Reply</Button>
-                            </ReplyForm>
-                        </div>
-                    </Comment>
+                        </Comment>
+                        <ReplyForm style={{ display: "none" }} onSubmit={(e) => handleReply(e, elem.key)} id="hiddenCommentReply" data-user={elem.user.username}>
+                            <textarea id="reply"></textarea>
+                            <Button width="117px" color="#AD1FEA">Post Reply</Button>
+                        </ReplyForm>
 
-                    {elem.replies && <Replies>
-                        {elem.replies.map(reply => {
-                            return (
-                                <Comment key={nanoid()}>
-                                    <Avatar width="40px" src={reply.user.image} />
-                                    <div className="rightSide">
-                                        <div className="userInfo">
-                                            <div>
-                                                <p>{reply.user.name}</p>
-                                                <span>@{reply.user.username.substring(0, reply.user.username.indexOf("@"))}</span>
+                        {elem.replies && <Replies>
+                            {elem.replies.map(reply => {
+                                return (
+                                    <div key={elem.key}>
+                                        <Comment key={nanoid()}>
+                                            <Avatar width="40px" src={reply.user.image} />
+                                            <div className="rightSide">
+                                                <div className="userInfo">
+                                                    <div>
+                                                        <p>{reply.user.name}</p>
+                                                        <span>@{reply.user.username.substring(0, reply.user.username.indexOf("@"))}</span>
+                                                    </div>
+                                                    <button onClick={openReply}>Reply</button>
+                                                </div>
+                                                <p className="comment">
+                                                    <span style={{ color: "#AD1FEA" }}>@{reply.replyingTo.substring(0, reply.replyingTo.indexOf("@"))}</span> {reply.content}
+                                                </p>
                                             </div>
-                                            <button onClick={openReply}>Reply</button>
-                                        </div>
-                                        <p className="comment">
-                                            <span style={{ color: "#AD1FEA" }}>@{reply.replyingTo.substring(0, reply.replyingTo.indexOf("@"))}</span> {reply.content}</p>
+                                        </Comment>
                                         <ReplyForm style={{ display: "none" }} onSubmit={(e) => handleReply(e, elem.key)} id="hiddenCommentReply" data-user={reply.user.username}>
                                             <textarea id="reply"></textarea>
                                             <Button width="117px" color="#AD1FEA">Post Reply</Button>
                                         </ReplyForm>
                                     </div>
-                                </Comment>
-                            )
-                        })}
-                    </Replies>}
-                </div>
+                                )
+                            })}
+                        </Replies>}
+                    </div>
+                </>
             )
         })
         return result
@@ -112,8 +120,8 @@ export default function FeedbackDetail() {
 
     async function handleReply(e, commentId) {
         e.preventDefault()
-
         const replyText = e.target.querySelector('#reply').value
+        if (!replyText) { return; }
         const ref = doc(db, 'feedback', id, 'comments', commentId)
         await updateDoc(ref, {
             replies: arrayUnion({
@@ -135,7 +143,7 @@ export default function FeedbackDetail() {
     function count(e) {
         let length = e.target.value.length;
         if (length >= 250) {
-            event.key !== "Backspace" && e.preventDefault();
+            e.key !== "Backspace" && e.preventDefault();
         } else {
             setCharLeft(250 - length - 1)
         }
@@ -144,12 +152,12 @@ export default function FeedbackDetail() {
     return (
         <DetailsContainer>
             <div className="flex">
-                <StyledLink to="/" color="#647196">
+                <StyledLink onClick={() => navigate(-1)} color="#647196">
                     <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L2 5l4-4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
                     Go Back
                 </StyledLink>
                 <Button hover="#7C91F9" width="142px" color="#4661E6" >
-                    <Link to={`/feedback/${id}/edit`}>
+                    <Link to={`/product-feedback/feedback/${id}/edit`}>
                         Edit Feedback
                     </Link>
                 </Button>

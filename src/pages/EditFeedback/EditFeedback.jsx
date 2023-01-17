@@ -61,18 +61,18 @@ export default function EditFeedback() {
             status: status.key,
             description: description
         })
-        navigate('/')
+        navigate('/product-feedback')
     }
 
     async function handleDelete(e) {
         e.preventDefault()
         await deleteDoc(doc(db, 'feedback', id))
-        navigate('/')
+        navigate('/product-feedback')
     }
 
     return (
         <UpdateContainer>
-            <StyledLink to={`/feedback/${id}`} color="#647196">
+            <StyledLink onClick={() => navigate(-1)} color="#647196">
                 <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L2 5l4-4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
                 Go Back
             </StyledLink>
