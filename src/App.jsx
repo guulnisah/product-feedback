@@ -19,14 +19,15 @@ export default function App() {
     <div>
       {authComplete && (
         <Routes>
-          <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
-          <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-          <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
-          <Route path="/feedback/:id" element={<FeedbackDetail />} />
-          <Route path="/feedback/new" element={<NewFeedback />} />
-          <Route path="/feedback/:id/edit" element={<EditFeedback />} />
-          <Route path="/roadmap" element={<Roadmap />} />
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/" element={<Navigate to="/product-feedback" />} />
+          <Route path="/product-feedback" element={user ? <Home /> : <Navigate to="/product-feedback/login" />} />
+          <Route path="/product-feedback/login" element={!user ? <Login /> : <Navigate to="/product-feedback" />} />
+          <Route path="/product-feedback/signup" element={!user ? <Signup /> : <Navigate to="/product-feedback" />} />
+          <Route path="/product-feedback/feedback/:id" element={<FeedbackDetail />} />
+          <Route path="/product-feedback/feedback/new" element={<NewFeedback />} />
+          <Route path="/product-feedback/feedback/:id/edit" element={<EditFeedback />} />
+          <Route path="/product-feedback/roadmap" element={<Roadmap />} />
+          <Route path="/product-feedback/*" element={<NotFound />} />
         </Routes>
       )}
     </div>
