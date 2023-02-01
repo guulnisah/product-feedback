@@ -431,10 +431,10 @@ border-radius: 5px;
 background-color: #fff;
 border-top: 6px solid;
 border-top-color: ${({ status }) => {
-        if (status === "planned") { return '#F49F85' }
-        if (status === "in-progress") { return '#AD1FEA' }
-        if (status === 'live') { return '#62BCFA' }
-    }};
+    if (status === "planned") { return '#F49F85' }
+    if (status === "in-progress") { return '#AD1FEA' }
+    if (status === 'live') { return '#62BCFA' }
+  }};
 
 h3 {
 a {
@@ -470,10 +470,10 @@ height: 10px;
 border-radius: 50%;
 margin-right: 1rem;
 background-color: ${({ status }) => {
-        if (status === "planned") { return '#F49F85' }
-        if (status === "in-progress") { return '#AD1FEA' }
-        if (status === 'live') { return '#62BCFA' }
-    }};
+    if (status === "planned") { return '#F49F85' }
+    if (status === "in-progress") { return '#AD1FEA' }
+    if (status === 'live') { return '#62BCFA' }
+  }};
 }
 
 @media screen and (max-width: 768px) {
@@ -670,6 +670,10 @@ display: flex;
 flex-direction: column;
 }
 
+div.footer {
+  flex-direction: row-reverse;
+}
+
 button {
 margin-left: auto;
 }
@@ -682,6 +686,9 @@ width: 80%;
 @media screen and (max-width: 576px) {
 width: 90%;
 padding: 1.5rem 1rem;
+div.footer {
+  flex-direction: column !important;  
+}
 button {
   width: 100%;
 }
