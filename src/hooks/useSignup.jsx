@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage"
-import { auth, storage } from '../firebase/config'
+import { auth, storage, db } from '../firebase/config'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { setDoc, doc } from 'firebase/firestore'
 
 export default function useSignup() {
     const [error, setError] = useState(null)
@@ -13,6 +14,11 @@ export default function useSignup() {
 
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password)
+
+            setDoc(doc(db, "users", res.user.uid), {
+                email: email,
+                upvotedOn: [],
+            });
 
             if (!res) {
                 throw new Error('Could not complete signup')

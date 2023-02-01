@@ -5,7 +5,7 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import useDB from '../../hooks/useDB'
 import { collection, addDoc, doc, updateDoc, getDocs, arrayUnion, increment } from 'firebase/firestore'
 import { db } from '../../firebase/config'
-import displayFeedback from '../../utils/displayFeedback'
+import Feedback from '../../components/Feedback'
 import { Link } from 'react-router-dom'
 import { nanoid } from 'nanoid'
 import { useNavigate } from 'react-router-dom'
@@ -163,7 +163,7 @@ export default function FeedbackDetail() {
                 </Button>
             </div>
             <Details>
-                {oneFeedback && displayFeedback(oneFeedback)}
+                {oneFeedback && <Feedback arr={oneFeedback} />}
                 <Comments>
                     <h3>{oneFeedback && oneFeedback[0]?.comments} Comment(s)</h3>
                     {comments && displayComments(comments)}

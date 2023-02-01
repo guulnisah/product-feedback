@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import useSignup from '../hooks/useSignup'
+import { Link } from 'react-router-dom'
 import { Button, RegistrationContainer, StyledInput, StyledLabel, RegistrationForm } from '../components/Styles'
+import { db } from '../firebase/config'
+import { setDoc, collection, addDoc, doc, updateDoc, getDocs, arrayUnion, increment } from 'firebase/firestore'
+
+
 
 export default function Signup() {
     const [email, setEmail] = useState('')
@@ -10,12 +15,14 @@ export default function Signup() {
     const [avatar, setAvatar] = useState(null)
     const [avatarError, setAvatarError] = useState(null)
 
-    function handleSubmit(e) {
+
+    async function handleSubmit(e) {
         e.preventDefault()
         signup(email, password, fullName, avatar)
     }
 
-    const handleFileChange = (e) => {
+
+    function handleFileChange(e) {
         setAvatar(null)
         let selected = e.target.files[0]
 
@@ -40,7 +47,7 @@ export default function Signup() {
         <RegistrationContainer>
             <RegistrationForm>
                 <h2>Sign Up</h2>
-                <form onSubmit={handleSubmit} className="auth-form">
+                <form onSubmit={handleSubmit}>
                     <div>
                         <StyledLabel htmlFor="email">E-mail</StyledLabel>
                         <StyledInput
@@ -83,7 +90,11 @@ export default function Signup() {
 
                     {avatarError && <div className="error">{avatarError}</div>}
 
-                    <Button width="144px" hover="#C75AF6" color="#AD1FEA">Sign up</Button>
+                    <div className="footer">
+                        <Button width="144px" hover="#C75AF6" color="#AD1FEA">Sign up</Button>
+                        <span>Already have an account? <Link to="/product-feedback/login">Login</Link></span>
+                    </div>
+
                     {error && <div className="error">{error}</div>}
                 </form>
             </RegistrationForm>
