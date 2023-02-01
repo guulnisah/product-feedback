@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import { RegistrationForm, Button, RegistrationContainer, StyledInput, StyledLabel } from '../components/Styles'
 
 export default function Login() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('demo@guulnisah.com')
+    const [password, setPassword] = useState('demodemo')
     const [error, login] = useLogin()
 
     function handleLogin(e) {
@@ -38,8 +38,10 @@ export default function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <Button width="144px" hover="#C75AF6" color="#AD1FEA">Log In</Button>
-                    <span>Don't have an account? <Link to="/product-feedback/signup">Signup</Link></span>
+                    <div class="footer" >
+                        <Button width="144px" hover="#C75AF6" color="#AD1FEA">Log In</Button>
+                        <span>Don't have an account? <Link to="/product-feedback/signup">Signup</Link></span>
+                    </div>
                 </form>
                 {error && error}
             </RegistrationForm>
