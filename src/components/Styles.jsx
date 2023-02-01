@@ -323,9 +323,11 @@ width: ${({ width }) => (width / 1.4)}px;
 `
 
 export const Button = styled.button`
+pointer-events:${({ disabled }) => disabled ? 'none' : 'auto'};
 height: 2.75rem;
 width: ${({ width }) => width ? width : '100%'};
 background: ${({ color }) => color};
+opacity: ${({ disabled }) => disabled ? '0.5' : '1'};
 color: #F2F4FE;
 border: none;
 border-radius: 0.625rem;
@@ -448,7 +450,13 @@ width: 100%;
 display: flex;
 align-items: center;
 justify-content: space-between;
-
+button.active {
+background: #4661E6;
+color: #fff;
+path {
+stroke: #fff;
+}
+}
 span {
 svg {
 margin-right: 0.5rem;

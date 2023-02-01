@@ -149,6 +149,10 @@ export default function FeedbackDetail() {
         }
     }
 
+    const notAllowedToEdit = oneFeedback && oneFeedback[0]?.createdBy !== user.uid
+
+
+
     return (
         <DetailsContainer>
             <div className="flex">
@@ -156,11 +160,14 @@ export default function FeedbackDetail() {
                     <svg width="7" height="10" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L2 5l4-4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
                     Go Back
                 </StyledLink>
-                <Button hover="#7C91F9" width="142px" color="#4661E6" >
-                    <Link to={`/product-feedback/feedback/${id}/edit`}>
-                        Edit Feedback
-                    </Link>
-                </Button>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                    <Button disabled={notAllowedToEdit} hover="#7C91F9" width="142px" color="#4661E6" >
+                        <Link to={`/product-feedback/feedback/${id}/edit`}>
+                            Edit Feedback
+                        </Link>
+                    </Button>
+                    {notAllowedToEdit && <span style={{ color: "#647196", fontSize: "14px", marginLeft: "1rem" }}>You can only edit your own feedback</span>}
+                </div>
             </div>
             <Details>
                 {oneFeedback && <Feedback arr={oneFeedback} />}

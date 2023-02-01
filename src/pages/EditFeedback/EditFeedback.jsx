@@ -8,11 +8,12 @@ import { updateDoc, doc, deleteDoc } from 'firebase/firestore'
 import { useParams } from 'react-router-dom'
 import { features, statuses, formDropdownStyles } from '../../utils/dropdownItems'
 import useDB from '../../hooks/useDB'
-
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 export default function EditFeedback() {
     const { id } = useParams()
     const { feedback } = useDB()
+    const { user } = useAuthContext()
     const [category, setCategory] = useState({});
     const [status, setStatus] = useState({});
     const [title, setTitle] = useState('')
@@ -70,6 +71,8 @@ export default function EditFeedback() {
         navigate('/product-feedback')
     }
 
+    const notAllowedToEdit = oneFeedback && oneFeedback.createdBy !== user.uid
+
     return (
         <UpdateContainer>
             <StyledLink onClick={() => navigate(-1)} color="#647196">
@@ -97,9 +100,9 @@ export default function EditFeedback() {
                         <StyledInput required onInvalid={invalidForm} height="100px" as="textarea" id="detail" value={description} onChange={(e) => setDescription(e.target.value)} />
                     </div>
                     <div className="buttonGroup">
-                        <Button hover="#C75AF6" width="144px" color="#AD1FEA" onClick={handleSubmit}>Save Changes</Button>
-                        <Button hover="#656EA3" width="93px" color="#3A4374" onClick={() => { navigate('/') }}>Cancel</Button>
-                        <Button className="first" hover="#E98888" width="93px" color="#D73737" onClick={handleDelete}>Delete</Button>
+                        <Button disabled={notAllowedToEdit} hover="#C75AF6" width="144px" color="#AD1FEA" onClick={handleSubmit}>Save Changes</Button>
+                        <Button disabled={notAllowedToEdit} hover="#656EA3" width="93px" color="#3A4374" onClick={() => { navigate('/') }}>Cancel</Button>
+                        <Button disabled={notAllowedToEdit} className="first" hover="#E98888" width="93px" color="#D73737" onClick={handleDelete}>Delete</Button>
                     </div>
                 </form>
             </FormContainer>

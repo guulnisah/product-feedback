@@ -6,10 +6,13 @@ import { useNavigate } from 'react-router-dom'
 import { db } from '../../firebase/config'
 import { collection, addDoc } from 'firebase/firestore'
 import { features, formDropdownStyles } from '../../utils/dropdownItems'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 export default function NewFeedback() {
     const [category, setCategory] = useState({ label: "Feature", key: "feature" });
     const navigate = useNavigate()
+    const { user } = useAuthContext()
+
 
     function handleChange(item) {
         setCategory(item);
@@ -24,7 +27,8 @@ export default function NewFeedback() {
             status: 'suggestion',
             upvotes: 0,
             description: e.target.querySelector('#detail').value,
-            comments: 0
+            comments: 0,
+            createdBy: user.uid,
         })
         navigate('/product-feedback')
     }
