@@ -1,7 +1,14 @@
 import { PillButton, UpvoteButton, Feature, Status } from '../components/Styles'
 import { Link } from 'react-router-dom'
+import handleUpvote from './handleUpvote'
+import { useAuthContext } from '../hooks/useAuthContext'
+import useCollection from '../hooks/useCollection'
 
 export default function displayFeatures(arr) {
+    const { user } = useAuthContext()
+    const { documents: users } = useCollection('users')
+    const currentUser = users.find(elem => elem.id === user.uid)
+
     return arr.map(elem => {
         return (
             <Feature key={elem.id} status={elem.status}>
@@ -12,7 +19,10 @@ export default function displayFeatures(arr) {
                 </div>
                 <PillButton as={'span'}>{elem.category}</PillButton>
                 <div className="lastRow">
-                    <UpvoteButton column={false}>
+                    <UpvoteButton
+                        column={false}
+                        className={currentUser?.upvotedOn.includes(elem.id) ? 'active' : ''}
+                        onClick={() => handleUpvote(elem.id, currentUser)}>
                         <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
                         {elem.upvotes}
                     </UpvoteButton>

@@ -3,39 +3,14 @@ import { Link } from 'react-router-dom'
 import { db } from '../firebase/config'
 import { useAuthContext } from '../hooks/useAuthContext'
 import { doc, updateDoc, arrayUnion, increment, arrayRemove } from "firebase/firestore";
-
+import handleUpvote from '../utils/handleUpvote'
 import useCollection from '../hooks/useCollection'
-
 
 export default function Feedback({ arr }) {
 
     const { user } = useAuthContext()
     const { documents: users } = useCollection('users')
-
     const currentUser = users.find(elem => elem.id === user.uid)
-
-    async function handleUpvote(id) {
-        const userRef = doc(db, 'users', user.uid)
-        const documentRef = doc(db, 'feedback', id)
-
-        const upvotedArray = currentUser.upvotedOn
-
-        if (upvotedArray.includes(id)) {
-            await updateDoc(userRef, {
-                upvotedOn: arrayRemove(id)
-            });
-            await updateDoc(documentRef, {
-                upvotes: increment(-1)
-            });
-        } else {
-            await updateDoc(userRef, {
-                upvotedOn: arrayUnion(id)
-            });
-            await updateDoc(documentRef, {
-                upvotes: increment(1)
-            });
-        }
-    }
 
     const result = arr.map((elem) => {
         return (
@@ -44,7 +19,7 @@ export default function Feedback({ arr }) {
                     <UpvoteButton
                         className={currentUser?.upvotedOn.includes(elem.id) ? 'active' : ''}
                         column
-                        onClick={() => handleUpvote(elem.id)}>
+                        onClick={() => handleUpvote(elem.id, currentUser)}>
                         <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd" /></svg>
                         {elem.upvotes}
                     </UpvoteButton>
